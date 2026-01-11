@@ -1,0 +1,122 @@
+/* 1. THEME VARIABLES */
+:root {
+    --primary: #000000;       /* Pitch Black */
+    --secondary: #555555;     /* Dark Gray */
+    --bg: #ffffff;            /* Pure White */
+    --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --border: #e5e5e5;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg);
+    color: var(--secondary);
+    margin: 0;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 2. HEADER */
+header { text-align: center; padding: 40px 0 20px; }
+
+.profile-img {
+    width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+    margin: 0 auto 30px auto; display: block;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+}
+
+header h1 {
+    margin: 0 0 15px 0; font-size: 3rem; color: var(--primary);
+    font-weight: 800; letter-spacing: -1px;
+}
+
+#bio { font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px; color: var(--secondary); }
+
+/* 3. LINKS & SERVICES */
+.header-links { margin-bottom: 30px; }
+
+/* Social Buttons (Clean Text Style) */
+.social-btn, .resume-btn {
+    display: inline-block; margin: 5px 15px; color: var(--primary);
+    text-decoration: none; font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 2px solid transparent;
+}
+.resume-btn {
+    background: var(--primary); color: white; padding: 10px 25px; 
+    border-radius: 0; /* Square button */
+}
+.social-btn:hover { border-bottom: 2px solid var(--primary); }
+
+/* Service Toggle */
+.service-toggle-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--primary);
+    padding: 12px 30px; border-radius: 0; cursor: pointer; font-weight: 600;
+    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+    margin: 20px auto; transition: all 0.3s ease;
+}
+.service-toggle-btn:hover { border-color: var(--primary); }
+
+.services-wrapper { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; transition: all 0.3s ease-in-out; }
+
+.service-tag {
+    background-color: #f7f7f7; color: var(--primary); font-size: 0.85rem;
+    font-weight: 600; padding: 10px 20px; border-radius: 0; border: none;
+}
+
+/* 4. FILTERS & GRID */
+#filter-container { margin: 50px 0 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+
+.filter-btn {
+    background: transparent; border: none; color: var(--secondary);
+    padding: 5px 15px; font-size: 0.9rem; cursor: pointer; font-weight: 500;
+}
+.filter-btn.active, .filter-btn:hover { color: var(--primary); font-weight: bold; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 60px; }
+
+/* Transparent Editorial Cards */
+.card { background: transparent; padding: 0; border-radius: 0; box-shadow: none; transition: transform 0.3s; }
+.card:hover { transform: translateY(-5px); }
+.card h3 { margin-top: 15px; font-size: 1.3rem; margin-bottom: 5px; color: var(--primary); font-weight: 700; }
+.card p { font-size: 1rem; color: var(--secondary); margin-bottom: 15px; }
+.card a { color: var(--primary); text-decoration: none; font-weight: bold; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+.card a:hover { border-bottom-color: var(--primary); }
+
+/* Media */
+iframe, video, img { border-radius: 0; width: 100%; display: block; }
+
+/* 5. FOOTER CONTACT (Underline Style) */
+.footer-contact {
+    margin-top: 100px; margin-bottom: 80px; text-align: center;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+}
+
+.input-group { display: flex; align-items: center; border-bottom: 2px solid var(--primary); }
+.input-group input {
+    flex: 1; padding: 15px 0; border: none; background: transparent;
+    font-size: 1.2rem; outline: none; color: var(--primary); font-family: var(--font-main);
+}
+.input-group button {
+    background: transparent; color: var(--primary); border: none;
+    padding: 15px 0 15px 20px; font-weight: 800; cursor: pointer;
+    text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;
+}
+.input-group button:hover { opacity: 0.6; }
+
+/* Utilities */
+.hidden { display: none !important; }
+.active-services { display: flex !important; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@media (max-width: 600px) {
+    header h1 { font-size: 2.2rem; }
+    .grid { gap: 40px; }
+    .footer-contact { margin-top: 60px; }
+}

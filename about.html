@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Alex The Marketer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav style="text-align: right; padding: 20px 40px; font-size: 0.85rem; font-weight: 600;">
+        <a href="index.html" style="text-decoration:none; color:black; margin-left:20px;">Home</a>
+        <a href="about.html" style="text-decoration:none; color:black; margin-left:20px; border-bottom: 2px solid black;">About Me</a>
+        <a href="#contact-section" style="text-decoration:none; color:black; margin-left:20px;">Get in touch</a>
+    </nav>
+
+    <header>
+        <div class="container">
+            <img id="profile-photo" src="" alt="Profile Photo" class="profile-img">
+            <h1 id="name"></h1>
+            
+            <div style="max-width: 600px; margin: 40px auto; text-align: left;">
+                <h3 style="font-size: 1.5rem;">My Story</h3>
+                <p>
+                    Hello! I'm a passionate marketer who loves data and storytelling. 
+                    (You can write a much longer bio here directly in the HTML).
+                </p>
+                <p>
+                    I have worked with over 20+ SaaS companies to help them scale...
+                </p>
+            </div>
+
+            <div class="header-links" style="margin-top: 40px;">
+                <div id="resume-container" style="margin-bottom: 20px;"></div>
+                <div id="social-links"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="contact-section" class="footer-contact">
+            <h3 style="margin-bottom: 20px;">Let's Chat</h3>
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Enter your email..." required>
+                    <button type="submit">SEND</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container" style="border-top: 1px solid #eee; padding-top: 20px; text-align: center; color: #888;">
+            <p>&copy; <span id="year"></span> <span id="footer-name"></span></p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

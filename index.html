@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kousalya Jayasankar - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <nav style="text-align: right; padding: 20px 40px; font-size: 0.85rem; font-weight: 600;">
+        <a href="index.html" style="text-decoration:none; color:black; margin-left:20px; border-bottom: 2px solid black;">Home</a>
+        <a href="about.html" style="text-decoration:none; color:black; margin-left:20px;">About Me</a>
+        <a href="#contact-section" style="text-decoration:none; color:black; margin-left:20px;">Get in touch</a>
+    </nav>
+
+    <header>
+        <div class="container">
+            <img id="profile-photo" src="" alt="Profile Photo" class="profile-img">
+            <h1 id="name"></h1>
+            <p id="bio" style="margin-bottom: 30px;"></p>
+            
+            <button id="service-toggle" class="service-toggle-btn">View Services +</button>
+            <div id="services-container" class="services-wrapper hidden"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="filter-container"></div>
+        <div id="project-list" class="grid"></div>
+
+        <div id="contact-section" class="footer-contact">
+            <h3 style="margin-bottom: 20px;">Ready to collaborate?</h3>
+            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Enter your email..." required>
+                    <button type="submit">SEND</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container" style="border-top: 1px solid #eee; padding-top: 20px; text-align: center; color: #888;">
+            <p>&copy; <span id="year"></span> <span id="footer-name"></span></p>
+        </div>
+    </footer>
+
+    <div id="blog-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn">&times; Close</button>
+            <div id="markdown-viewer"></div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
