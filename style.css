@@ -41,16 +41,20 @@ header .container {
 }
 
 .profile-img {
-    width: 180px;             /* Made slightly larger */
-    height: 180px; 
+    width: 180px;
+    height: 180px;
     object-fit: cover;
     
-    /* Grid Settings: Force image to sit on the left spanning all rows */
+    /* ----> ADD THIS NEW LINE RIGHT HERE: <---- */
+    object-position: top center; 
+    /* This tells the browser: "Always show the top of the photo first!" */
+
+    /* Grid Settings */
     grid-column: 1;
     grid-row: 1 / 6; 
     margin: 0; 
     
-    border-radius: 15px;       /* Square with rounded corners */
+    border-radius: 15px;
     border: 4px solid white;   
     box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
 }
@@ -194,3 +198,4 @@ iframe, video, img { border-radius: 0; width: 100%; display: block; }
     header h1 { font-size: 2.2rem; }
     .grid { gap: 40px; }
 }
+
