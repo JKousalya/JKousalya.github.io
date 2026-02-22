@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Alex The Marketer</title>
+    <title>About Me</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,33 +19,42 @@
             <img id="profile-photo" src="" alt="Profile Photo" class="profile-img">
             <h1 id="name"></h1>
             
-            <div style="max-width: 600px; margin: 40px auto; text-align: left;">
-                <h3 style="font-size: 1.5rem;">My Story</h3>
-                <p>
-                    Hello! I'm a passionate marketer who loves data and storytelling. 
-                    (You can write a much longer bio here directly in the HTML).
-                </p>
-                <p>
-                    I have worked with over 20+ SaaS companies to help them scale...
-                </p>
-            </div>
-
-            <div class="header-links" style="margin-top: 40px;">
-                <div id="resume-container" style="margin-bottom: 20px;"></div>
+            <h5 style="grid-column: 2; margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 500; color: #cccccc; max-width: 600px;">
+                Engineer by degree. Marketer by choice. Nerd by nature.
+            </h5>
+            
+            <div class="header-links" style="grid-column: 2; margin: 0;">
+                <div id="resume-container" style="margin-bottom: 15px;"></div>
                 <div id="social-links"></div>
             </div>
         </div>
     </header>
 
     <main class="container">
+        <div style="max-width: 800px; margin: 20px auto 60px auto; font-size: 1.1rem; color: var(--secondary); line-height: 1.8;">
+            <p>I’m a Computer Science Engineer who took a detour through technical writing and SEO to become a full-time marketer. Because of my background, I don’t just see "content".I see systems.</p>
+
+            <p>I’m the person who looks at a billboard, a landing page, or a datasheet and immediately starts deconstructing the why and the how behind the psychology of that click.</p>
+
+            <p><b style="color: var(--primary);">What I’ve built:</b> I’ve handled the full spectrum of SaaS content: from technical white papers and documentation to videos and sales enablement materials that actually move the needle on revenue.</p>
+
+            <p><b style="color: var(--primary);">How I think:</b></p>
+            <ul style="margin-bottom: 25px;">
+                <li style="margin-bottom: 10px;"><b>Data-Backed, Value-First:</b> If it doesn’t help the user or show up in the data, it’s not worth publishing.</li>
+                <li style="margin-bottom: 10px;"><b>GTM Obsessed:</b> I spend my free time deconstructing Go-To-Market strategies to see how brands actually win their markets.</li>
+                <li><b>Organic Growth:</b> My focus is always on turning organic traffic into leads through high-intent strategy.</li>
+            </ul>
+
+            <p>I’m looking for long-term partnerships or interesting project collabs. If you want a marketer who thinks like an engineer, let’s talk.</p>
+        </div>
+
         <div id="contact-section" class="footer-contact">
-            <h3 style="margin-bottom: 20px;">Let's Chat</h3>
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                <div class="input-group">
-                    <input type="email" name="email" placeholder="Enter your email..." required>
-                    <button type="submit">SEND</button>
-                </div>
-            </form>
+            <h3 style="margin-bottom: 20px; color: var(--primary);">Get a free consultation</h3>
+            
+            <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" class="resume-btn" style="padding: 15px 40px; font-size: 1rem; border: 2px solid black;">
+                get it NOW  ↗
+            </a>
+            
         </div>
     </main>
 
