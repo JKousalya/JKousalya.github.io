@@ -24,46 +24,39 @@ body {
 
 /* 2. HEADER - SIDE-BY-SIDE LAYOUT */
 header { 
-    background-color: #1a1a1a; /* Dark Background */
-    color: white;              /* White Text */
+    background-color: #1a1a1a; 
+    color: white;              
     padding: 80px 0;      
     width: 100%;
     margin-bottom: 50px;
 }
 
-/* This creates the Side-by-Side Grid Layout */
 header .container {
     display: grid;
-    grid-template-columns: min-content 1fr; /* Column 1: Image, Column 2: Text */
-    column-gap: 50px; /* Space between photo and text */
-    align-items: center; /* Vertically center everything */
-    text-align: left; /* Align text to the left */
+    grid-template-columns: min-content 1fr; 
+    column-gap: 50px; 
+    align-items: center; 
+    text-align: left; 
 }
 
 .profile-img {
-    width: 180px;
-    height: 180px;
+    width: 180px;             
+    height: 180px; 
     object-fit: cover;
+    object-position: top center; /* Fixes the cropped head issue */
     
-    /* ----> ADD THIS NEW LINE RIGHT HERE: <---- */
-    object-position: top center; 
-    /* This tells the browser: "Always show the top of the photo first!" */
-
-    /* Grid Settings */
     grid-column: 1;
-    grid-row: 1 / 6; 
     margin: 0; 
     
-    border-radius: 15px;
+    border-radius: 15px;       
     border: 4px solid white;   
     box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
 }
 
-/* Force all text elements into the second column */
-header h1, #bio, .header-links, .service-toggle-btn {
-    grid-column: 2;
-    margin-left: 0;
-    text-align: left;
+/* NEW: Controls everything on the right side */
+.header-text-content { 
+    grid-column: 2; 
+    text-align: left; 
 }
 
 header h1 {
@@ -79,16 +72,15 @@ header h1 {
     font-size: 1.1rem; 
     max-width: 600px; 
     margin: 0 0 25px 0; 
-    color: #cccccc;            /* Light Gray text */
+    color: #cccccc;            
 }
 
 /* 3. BUTTONS */
 .header-links { margin-bottom: 25px; }
 
-/* Social Buttons */
 .social-btn {
     display: inline-block; 
-    margin: 0 15px 0 0; /* Margin only on right side */
+    margin: 0 15px 0 0; 
     color: white;              
     text-decoration: none; 
     font-size: 0.85rem; 
@@ -104,7 +96,6 @@ header h1 {
     border-bottom: 2px solid #ffd700; 
 }
 
-/* Resume Button */
 .resume-btn {
     background: white;         
     color: black;              
@@ -122,10 +113,10 @@ header h1 {
     background-color: #f0f0f0;
 }
 
-/* VIEW SERVICES BUTTON (White Box / Black Text) */
+/* VIEW SERVICES BUTTON */
 .service-toggle-btn {
-    background-color: #ffffff; /* Solid White */
-    color: #000000;            /* Solid Black Text */
+    background-color: #ffffff; 
+    color: #000000;            
     border: none;
     padding: 12px 30px; 
     border-radius: 4px;
@@ -134,7 +125,7 @@ header h1 {
     font-size: 0.85rem; 
     text-transform: uppercase; 
     letter-spacing: 1px;
-    margin: 0; /* Remove auto margins */
+    margin: 0; 
     transition: all 0.3s ease;
     display: inline-block;
     width: fit-content;
@@ -145,9 +136,27 @@ header h1 {
     transform: translateY(-2px); 
 }
 
-/* Services Section */
-.services-wrapper { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; }
-.service-tag { background-color: #f7f7f7; color: var(--primary); font-size: 0.85rem; font-weight: 600; padding: 10px 20px; border: none; }
+/* FIXED SERVICE TAGS ALIGNMENT */
+.services-wrapper { 
+    display: flex; 
+    justify-content: flex-start; /* Aligns tags to the left */
+    align-items: flex-start; 
+    flex-wrap: wrap; 
+    gap: 12px; 
+    margin-top: 20px; 
+    width: 100%; 
+    transition: all 0.3s ease-in-out; 
+}
+
+.service-tag { 
+    background-color: #ffffff; 
+    color: var(--primary); 
+    font-size: 0.85rem; 
+    font-weight: 700; 
+    padding: 10px 20px; 
+    border-radius: 4px; 
+    border: none; 
+}
 
 /* 4. FILTERS & GRID */
 #filter-container { margin: 50px 0 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; text-align: center;}
@@ -174,28 +183,30 @@ iframe, video, img { border-radius: 0; width: 100%; display: block; }
 
 /* Utilities */
 .hidden { display: none !important; }
-.active-services { display: flex !important; animation: fadeIn 0.5s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.active-services { display: flex !important; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* MOBILE RESPONSIVE FIXES */
 @media (max-width: 768px) {
-    /* On mobile, stack them back vertically so it fits */
-    header .container {
+    header .container { 
         display: block; 
-        text-align: center;
+        text-align: center; 
     }
-    .profile-img {
-        margin: 0 auto 30px auto; /* Center image */
-        width: 150px; height: 150px;
+    .profile-img { 
+        margin: 0 auto 30px auto; 
+        width: 150px; 
+        height: 150px; 
     }
-    header h1, #bio, .header-links, .service-toggle-btn {
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
+    .header-text-content { 
+        text-align: center; 
     }
-    .service-toggle-btn { margin: 20px auto; }
-    
+    .services-wrapper { 
+        justify-content: center; /* Centers tags on mobile */
+    } 
+    .service-toggle-btn { 
+        margin: 0 auto; 
+        display: block; 
+    }
     header h1 { font-size: 2.2rem; }
     .grid { gap: 40px; }
 }
-
