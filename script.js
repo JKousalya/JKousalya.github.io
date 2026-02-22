@@ -54,13 +54,16 @@ if (resumeContainer && data && data.resume) {
 
 const socialContainer = document.getElementById('social-links');
 if (socialContainer && data && data.contact) {
-    for (const [platform, url] of Object.entries(data.contact)) {
+    // Note: social buttons are linked to your contact object.
+    const platformNames = Object.keys(data.contact);
+    platformNames.forEach(platform => {
         const link = document.createElement('a');
-        link.href = url;
+        link.href = data.contact[platform];
         link.textContent = platform; 
         link.className = 'social-btn';
+        link.target = "_blank";
         socialContainer.appendChild(link);
-    }
+    });
 }
 
 // 5. Modal Logic
@@ -74,7 +77,7 @@ if (modal && closeModal) {
     });
 }
 
-// 6. Projects & Filters (Only runs on Home Page)
+// 6. Projects & Filters & MEDIUM AUTO-FETCH
 const projectContainer = document.getElementById('project-list');
 const filterContainer = document.getElementById('filter-container');
 
@@ -100,17 +103,15 @@ if (projectContainer && filterContainer && data && data.projects) {
             
             } else if (project.type === 'audio') {
                 mediaContent = `<audio controls src="${project.source}"></audio>`;
-                actionBtn = `<a href="${project.link}" target="_blank">Listen Podcast ♫</a>`;
+                actionBtn = `<a href="${project.link}" target="_blank">${project.buttonText || "Listen Podcast ♫"}</a>`;
             
             } else if (project.type === 'markdown') {
-                // Button triggers the Popup Modal
                 actionBtn = `<button onclick="loadMarkdown('${project.source}')" class="read-btn">Read Article →</button>`;
             
             } else {
                 // Default for text/blogs
                 actionBtn = `<a href="${project.link}" target="_blank">Read Blog ↗</a>`;
             }
-            // ---------------------------
 
             card.innerHTML = `
                 ${mediaContent}
@@ -136,7 +137,9 @@ if (projectContainer && filterContainer && data && data.projects) {
     };
 
     function setupFilters() {
+        filterContainer.innerHTML = ''; // Clear existing buttons before rebuilding
         const categories = ['All', ...new Set(data.projects.map(p => p.category))];
+        
         categories.forEach(category => {
             const btn = document.createElement('button');
             btn.textContent = category;
@@ -149,10 +152,53 @@ if (projectContainer && filterContainer && data && data.projects) {
             });
             filterContainer.appendChild(btn);
         });
+        
         const firstBtn = document.querySelector('.filter-btn');
         if (firstBtn) firstBtn.classList.add('active');
     }
 
-    setupFilters();
-    displayProjects(data.projects);
+    // --- MEDIUM AUTO-FETCH LOGIC ---
+    // This fetches your live Medium feed and injects it into your projects!
+    const mediumUsername = "jkousalya007"; 
+    const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumUsername}`;
+
+    fetch(rss2jsonUrl)
+        .then(response => response.json())
+        .then(rssData => {
+            if (rssData.status === "ok" && rssData.items.length > 0) {
+                
+                // Convert Medium posts into Portfolio Cards
+                const liveMediumBlogs = rssData.items.map(item => {
+                    // Extract a clean 120-character snippet from the blog body
+                    let cleanText = item.content.replace(/<[^>]+>/g, '').trim(); 
+                    let snippet = cleanText.substring(0, 120) + '...';
+
+                    return {
+                        title: item.title,
+                        category: "Blogs", // Puts it in your "Blogs" filter
+                        type: "text",
+                        source: "",
+                        description: snippet,
+                        link: item.link
+                    };
+                });
+
+                // Add the live blogs to the TOP of your projects list
+                data.projects = [...liveMediumBlogs, ...data.projects];
+
+                // Refresh the website UI so the new blogs appear and filters update
+                setupFilters();
+                displayProjects(data.projects);
+            } else {
+                // If Medium fails to load, just load the hardcoded stuff
+                setupFilters();
+                displayProjects(data.projects);
+            }
+        })
+        .catch(error => {
+            console.error("Medium Fetch Error:", error);
+            // Fallback to manual data if fetch fails
+            setupFilters();
+            displayProjects(data.projects);
+        });
 }
