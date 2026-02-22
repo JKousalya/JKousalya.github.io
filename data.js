@@ -6,11 +6,13 @@ const data = {
     photo: "assets/profile.jpeg", 
     resume: "assets/MyResume.pdf", 
 
+    // YOUR NEW SERVICES LIST
     services: [
-        "Copywriting", 
-        "SEO Blog Writing", 
-        "Social Media Strategy", 
-        "Email Marketing"
+        "SaaS Content Strategy (SEO + GTM Alignment)",
+        "Sales enablement Assets (White paper, Pitch decks)",
+        "SEO Audits (Content Architecture + Intent mapping )",
+        "Multimedia (Tutorial videos, Course creation)",
+        "Content Writing (Copy, Article)",
     ],
     
     contact: {
@@ -19,31 +21,8 @@ const data = {
         medium: "https://medium.com/@jkousalya007"
     },
 
-    projects: [
-        {
-            title: "Search intent mismatch: When Google Thinks SaaS is a Tent",
-            category: "Blogs",
-            type: "text",
-            source: "",
-            description: "What is search intent and why search intent mismatch occur? ",
-            link: "https://medium.com/@jkousalya007/search-intent-mismatch-b9b786d253a4"
-        },
-        {
-            title: "How to Scale Organic Traffic",
-            category: "Blogs",
-            type: "text",
-            source: "",
-            description: "A guide on keyword clustering that increased traffic by 40%.",
-            link: "https://medium.com"
-        },
-        {
-            title: "How to Scale Organic Traffic",
-            category: "Blogs",
-            type: "text",
-            source: "",
-            description: "A guide on keyword clustering that increased traffic by 40%.",
-            link: "https://medium.com"
-        },
+    projects: [ 
+        /*
         {
             title: "How to Scale Organic Traffic",
             category: "Blogs",
@@ -79,23 +58,23 @@ const data = {
             link: "#"
         },
         {
-        title: "Podcast Ep 10: The AI Revolution",
-        category: "Podcasts",
-        
-        // 1. This makes the AUDIO PLAYER appear on your card
-        type: "audio", 
-        
-        // 2. The file that plays when they press 'Play' on the card
-        source: "assets/podcast.mp3", 
-        
-        // 3. The description
-        description: "Listen to the audio here, or watch the full video on our channel.",
-        
-        // 4. Where the button takes them (The YouTube Video)
-        link: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID",
-        
-        // 5. Custom Button Text
-        buttonText: "Watch Video on YouTube ↗" 
-    },
-    ]
+            title: "Podcast Ep 10: The AI Revolution",
+            category: "Podcasts",
+            
+            // 1. This makes the AUDIO PLAYER appear on your card
+            type: "audio", 
+            
+            // 2. The file that plays when they press 'Play' on the card
+            source: "assets/podcast.mp3", 
+            
+            // 3. The description
+            description: "Listen to the audio here, or watch the full video on our channel.",
+            
+            // 4. Where the button takes them (The YouTube Video)
+            link: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID",
+            
+            // 5. Custom Button Text
+            buttonText: "Watch Video on YouTube ↗" 
+        } */
+    ] 
 };
