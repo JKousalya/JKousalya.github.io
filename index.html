@@ -18,26 +18,28 @@
     <header>
         <div class="container">
             <img id="profile-photo" src="" alt="Profile Photo" class="profile-img">
-            <h1 id="name"></h1>
-            <p id="bio" style="margin-bottom: 30px;"></p>
             
-            <button id="service-toggle" class="service-toggle-btn">View Services +</button>
-            <div id="services-container" class="services-wrapper hidden"></div>
+            <div class="header-text-content">
+                <h1 id="name"></h1>
+                <p id="bio" style="margin-bottom: 30px;"></p>
+                <div id="resume-container" style="margin-bottom: 15px;"></div>
+                <button id="service-toggle" class="service-toggle-btn">View Services +</button>
+                <div id="services-container" class="services-wrapper hidden"></div>
+            </div>
         </div>
     </header>
 
     <main class="container">
         <div id="filter-container"></div>
         <div id="project-list" class="grid"></div>
-
+        
         <div id="contact-section" class="footer-contact">
             <h3 style="margin-bottom: 20px;">Ready to collaborate?</h3>
-            <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                <div class="input-group">
-                    <input type="email" name="email" placeholder="Enter your email..." required>
-                    <button type="submit">SEND</button>
-                </div>
-            </form>
+            
+            <a href="https://forms.gle/U79fQpouWCjrWvJfA" target="_blank" class="resume-btn" style="padding: 15px 40px; font-size: 1rem; border: 2px solid black;">
+                Let's begin↗
+            </a>
+            
         </div>
     </main>
 
