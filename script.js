@@ -54,7 +54,6 @@ if (resumeContainer && data && data.resume) {
 
 const socialContainer = document.getElementById('social-links');
 if (socialContainer && data && data.contact) {
-    // Note: social buttons are linked to your contact object.
     const platformNames = Object.keys(data.contact);
     platformNames.forEach(platform => {
         const link = document.createElement('a');
@@ -158,24 +157,31 @@ if (projectContainer && filterContainer && data && data.projects) {
     }
 
     // --- MEDIUM AUTO-FETCH LOGIC ---
-    // This fetches your live Medium feed and injects it into your projects!
     const mediumUsername = "jkousalya007"; 
     const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumUsername}`;
 
     fetch(rss2jsonUrl)
         .then(response => response.json())
         .then(rssData => {
-            if (rssData.status === "ok" && rssData.items.length > 0) {
+            if (rssData.status === "ok" && rssData.items && rssData.items.length > 0) {
                 
                 // Convert Medium posts into Portfolio Cards
                 const liveMediumBlogs = rssData.items.map(item => {
-                    // Extract a clean 120-character snippet from the blog body
-                    let cleanText = item.content.replace(/<[^>]+>/g, '').trim(); 
+                    
+                    // BULLETPROOF TEXT EXTRACTION:
+                    // Check both 'content' and 'description' to prevent errors!
+                    let rawHTML = item.content || item.description || "";
+                    let cleanText = rawHTML.replace(/<[^>]+>/g, '').trim(); 
+                    
+                    // Decode random HTML symbols back to normal text
+                    let doc = new DOMParser().parseFromString(cleanText, "text/html");
+                    cleanText = doc.documentElement.textContent;
+
                     let snippet = cleanText.substring(0, 120) + '...';
 
                     return {
                         title: item.title,
-                        category: "Blogs", // Puts it in your "Blogs" filter
+                        category: "Blogs", 
                         type: "text",
                         source: "",
                         description: snippet,
@@ -183,21 +189,17 @@ if (projectContainer && filterContainer && data && data.projects) {
                     };
                 });
 
-                // Add the live blogs to the TOP of your projects list
                 data.projects = [...liveMediumBlogs, ...data.projects];
-
-                // Refresh the website UI so the new blogs appear and filters update
+                
                 setupFilters();
                 displayProjects(data.projects);
             } else {
-                // If Medium fails to load, just load the hardcoded stuff
                 setupFilters();
                 displayProjects(data.projects);
             }
         })
         .catch(error => {
             console.error("Medium Fetch Error:", error);
-            // Fallback to manual data if fetch fails
             setupFilters();
             displayProjects(data.projects);
         });
