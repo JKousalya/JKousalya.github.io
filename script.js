@@ -156,51 +156,76 @@ if (projectContainer && filterContainer && data && data.projects) {
         if (firstBtn) firstBtn.classList.add('active');
     }
 
-    // --- MEDIUM AUTO-FETCH LOGIC ---
+    // --- MEDIUM AUTO-FETCH LOGIC (BULLETPROOF XML PARSER) ---
     const mediumUsername = "jkousalya007"; 
-    const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumUsername}`;
+    const mediumRSSUrl = `https://medium.com/feed/@${mediumUsername}`;
+    
+    // We use AllOrigins to safely bridge Medium's feed directly into the browser
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(mediumRSSUrl)}`;
 
-    fetch(rss2jsonUrl)
-        .then(response => response.json())
-        .then(rssData => {
-            if (rssData.status === "ok" && rssData.items && rssData.items.length > 0) {
+    fetch(proxyUrl)
+        .then(response => {
+            if (response.ok) return response.json();
+            throw new Error('Network response was not ok.');
+        })
+        .then(apiData => {
+            // 1. Translate the raw XML data from Medium
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(apiData.contents, "text/xml");
+            
+            // 2. Find all the blog "items" in the feed
+            const items = xmlDoc.querySelectorAll("item");
+            const liveMediumBlogs = [];
+
+            items.forEach(item => {
+                const title = item.querySelector("title") ? item.querySelector("title").textContent : "Untitled";
+                const link = item.querySelector("link") ? item.querySelector("link").textContent : "#";
                 
-                // Convert Medium posts into Portfolio Cards
-                const liveMediumBlogs = rssData.items.map(item => {
-                    
-                    // BULLETPROOF TEXT EXTRACTION:
-                    // Check both 'content' and 'description' to prevent errors!
-                    let rawHTML = item.content || item.description || "";
-                    let cleanText = rawHTML.replace(/<[^>]+>/g, '').trim(); 
-                    
-                    // Decode random HTML symbols back to normal text
-                    let doc = new DOMParser().parseFromString(cleanText, "text/html");
-                    cleanText = doc.documentElement.textContent;
+                // 3. Extract the text safely (Medium hides it in a <content:encoded> tag)
+                let rawHTML = "";
+                const encoded1 = item.getElementsByTagName("content:encoded");
+                const encoded2 = item.getElementsByTagNameNS("*", "encoded");
+                
+                if (encoded1.length > 0) {
+                    rawHTML = encoded1[0].textContent;
+                } else if (encoded2.length > 0) {
+                    rawHTML = encoded2[0].textContent;
+                } else if (item.querySelector("description")) {
+                    rawHTML = item.querySelector("description").textContent;
+                }
 
-                    let snippet = cleanText.substring(0, 120) + '...';
+                // 4. Clean up the text for the card description
+                let cleanText = rawHTML.replace(/<[^>]+>/g, '').trim(); 
+                let doc = new DOMParser().parseFromString(cleanText, "text/html");
+                cleanText = doc.documentElement.textContent;
+                let snippet = cleanText.substring(0, 120) + '...';
 
-                    return {
-                        title: item.title,
-                        category: "Blogs", 
-                        type: "text",
-                        source: "",
-                        description: snippet,
-                        link: item.link
-                    };
+                // 5. Build the card data
+                liveMediumBlogs.push({
+                    title: title,
+                    category: "Blogs", 
+                    type: "text",
+                    source: "",
+                    description: snippet,
+                    link: link
                 });
+            });
 
+            // 6. Push to the live website
+            if (liveMediumBlogs.length > 0) {
+                data.projects = data.projects || [];
                 data.projects = [...liveMediumBlogs, ...data.projects];
-                
-                setupFilters();
-                displayProjects(data.projects);
-            } else {
-                setupFilters();
-                displayProjects(data.projects);
             }
+            
+            setupFilters();
+            displayProjects(data.projects);
         })
         .catch(error => {
             console.error("Medium Fetch Error:", error);
+            // Fallback to manual blogs if it completely fails
             setupFilters();
-            displayProjects(data.projects);
+            if (data && data.projects) {
+                displayProjects(data.projects);
+            }
         });
 }
