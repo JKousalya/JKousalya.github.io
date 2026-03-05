@@ -80,8 +80,11 @@ if (modal && closeModal) {
 const projectContainer = document.getElementById('project-list');
 const filterContainer = document.getElementById('filter-container');
 
-if (projectContainer && filterContainer && data && data.projects) {
+if (projectContainer && filterContainer && data) {
     
+    // Ensure data.projects exists as an array
+    data.projects = data.projects || [];
+
     function displayProjects(items) {
         projectContainer.innerHTML = ''; 
         items.forEach(project => {
@@ -123,20 +126,8 @@ if (projectContainer && filterContainer && data && data.projects) {
         });
     }
 
-    // Global function for Markdown
-    window.loadMarkdown = function(filePath) {
-        if (!modal) return;
-        fetch(filePath)
-            .then(response => response.text())
-            .then(text => {
-                modalContent.innerHTML = marked.parse(text);
-                modal.classList.remove('hidden');
-            })
-            .catch(err => console.error('Error loading blog:', err));
-    };
-
     function setupFilters() {
-        filterContainer.innerHTML = ''; // Clear existing buttons before rebuilding
+        filterContainer.innerHTML = ''; 
         const categories = ['All', ...new Set(data.projects.map(p => p.category))];
         
         categories.forEach(category => {
@@ -156,51 +147,47 @@ if (projectContainer && filterContainer && data && data.projects) {
         if (firstBtn) firstBtn.classList.add('active');
     }
 
-    // --- MEDIUM AUTO-FETCH LOGIC (BULLETPROOF XML PARSER) ---
+    // --- BULLETPROOF MEDIUM AUTO-FETCH LOGIC ---
     const mediumUsername = "jkousalya007"; 
     const mediumRSSUrl = `https://medium.com/feed/@${mediumUsername}`;
     
-    // We use AllOrigins to safely bridge Medium's feed directly into the browser
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(mediumRSSUrl)}`;
+    // Using the 'raw' proxy endpoint to get pure XML data
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(mediumRSSUrl)}`;
 
     fetch(proxyUrl)
         .then(response => {
-            if (response.ok) return response.json();
-            throw new Error('Network response was not ok.');
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
         })
-        .then(apiData => {
-            // 1. Translate the raw XML data from Medium
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(apiData.contents, "text/xml");
-            
-            // 2. Find all the blog "items" in the feed
-            const items = xmlDoc.querySelectorAll("item");
+        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then(xmlDoc => {
+            // Native, fail-proof XML parsing
+            const items = xmlDoc.getElementsByTagName("item");
             const liveMediumBlogs = [];
 
-            items.forEach(item => {
-                const title = item.querySelector("title") ? item.querySelector("title").textContent : "Untitled";
-                const link = item.querySelector("link") ? item.querySelector("link").textContent : "#";
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
                 
-                // 3. Extract the text safely (Medium hides it in a <content:encoded> tag)
+                let title = item.getElementsByTagName("title")[0]?.textContent || "Untitled";
+                let link = item.getElementsByTagName("link")[0]?.textContent || "#";
+                
+                // Safely grab the content box
                 let rawHTML = "";
-                const encoded1 = item.getElementsByTagName("content:encoded");
-                const encoded2 = item.getElementsByTagNameNS("*", "encoded");
-                
-                if (encoded1.length > 0) {
-                    rawHTML = encoded1[0].textContent;
-                } else if (encoded2.length > 0) {
-                    rawHTML = encoded2[0].textContent;
-                } else if (item.querySelector("description")) {
-                    rawHTML = item.querySelector("description").textContent;
+                const encodedContent = item.getElementsByTagName("content:encoded")[0];
+                const descriptionContent = item.getElementsByTagName("description")[0];
+
+                if (encodedContent) {
+                    rawHTML = encodedContent.textContent;
+                } else if (descriptionContent) {
+                    rawHTML = descriptionContent.textContent;
                 }
 
-                // 4. Clean up the text for the card description
-                let cleanText = rawHTML.replace(/<[^>]+>/g, '').trim(); 
-                let doc = new DOMParser().parseFromString(cleanText, "text/html");
-                cleanText = doc.documentElement.textContent;
-                let snippet = cleanText.substring(0, 120) + '...';
+                // Bulletproof HTML Stripper
+                let tempDiv = document.createElement("div");
+                tempDiv.innerHTML = rawHTML;
+                let cleanText = tempDiv.textContent || tempDiv.innerText || "";
+                let snippet = cleanText.substring(0, 120).trim() + "...";
 
-                // 5. Build the card data
                 liveMediumBlogs.push({
                     title: title,
                     category: "Blogs", 
@@ -209,11 +196,10 @@ if (projectContainer && filterContainer && data && data.projects) {
                     description: snippet,
                     link: link
                 });
-            });
+            }
 
-            // 6. Push to the live website
+            // Combine and render
             if (liveMediumBlogs.length > 0) {
-                data.projects = data.projects || [];
                 data.projects = [...liveMediumBlogs, ...data.projects];
             }
             
@@ -221,11 +207,21 @@ if (projectContainer && filterContainer && data && data.projects) {
             displayProjects(data.projects);
         })
         .catch(error => {
-            console.error("Medium Fetch Error:", error);
-            // Fallback to manual blogs if it completely fails
-            setupFilters();
-            if (data && data.projects) {
-                displayProjects(data.projects);
+            console.error("Medium Fetch Failed:", error);
+            
+            // THE FAILSAFE: If the API breaks, show this fallback card so the page isn't empty!
+            if (data.projects.length === 0) {
+                data.projects.push({
+                    title: "Check out my latest articles on Medium",
+                    category: "Blogs",
+                    type: "text",
+                    source: "",
+                    description: "Click below to read my most recent thoughts on SaaS, SEO, and content strategy.",
+                    link: `https://medium.com/@${mediumUsername}`
+                });
             }
+            
+            setupFilters();
+            displayProjects(data.projects);
         });
 }
